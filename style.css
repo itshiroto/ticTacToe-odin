@@ -24,4 +24,11 @@ html {
 
 .board-item {
     border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-icon {
+    font-size: 8em;
 }
