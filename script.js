@@ -76,6 +76,16 @@ const displayController = (function() {
 
 const gameController = (function() {
     let player1, player2, currentlyPlaying;
+    // const winCondition = [
+    //     [0,1,2],
+    //     [3,4,5],
+    //     [6,7,8],
+    //     [0,3,6],
+    //     [1,4,7],
+    //     [2,5,8],
+    //     [0,4,8],
+    //     [2,4,6],
+    // ];
     const start = () => {
         player1 = Player("player1", 'x');
         player2 = Player("player2", 'o');
@@ -90,16 +100,58 @@ const gameController = (function() {
     const play = (index) => {
         if (Gameboard.get()[index] != '') return;
         Gameboard.mark(currentlyPlaying.getMove(), index)
+        displayController.render();
+        checkWinner();
+        switchPlayer();
+    }
+
+    const switchPlayer = () => {
         switch (currentlyPlaying.getName()) {
             case "player1": currentlyPlaying = player2; break;
             case "player2": currentlyPlaying = player1; break;
         }
-        displayController.render();
+    }
+
+    const checkWinner = () => {
+        const winCondition = [
+                // rows
+                [0,1,2],
+                [3,4,5],
+                [6,7,8],
+                // columns
+                [0,3,6],
+                [1,4,7],
+                [2,5,8],
+                // diagonal
+                [0,4,8],
+                [2,4,6],
+            ];
+        // Get currentPlayer Mark and Array of selection
+        const currentPlayerMark = currentlyPlaying.getMove();
+        const currentPlayerSel = Gameboard.get().map(val => {
+            if (val === currentPlayerMark) return currentPlayerMark;
+            else return "";
+        });
+       
+        // Check the array if currentlyPlaying player wins
+        let win = winCondition.some((val) => {
+            return val.every((mark) => {
+                if (currentPlayerSel[mark] != "") return true;
+                else return false
+            });
+        });
+
+        // If wins, then return
+        // TODO
+        if (win) console.log(`${currentlyPlaying.getName()} wins`)
+
+        // TODO: If array full, then tie
     }
     return {
         start,
         getPlayer,
         play,
+        checkWinner,
     }
 })()
 
