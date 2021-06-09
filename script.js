@@ -1,5 +1,6 @@
 "use strict";
 
+
 const Player = (name, move) => {
     const playerName = name;
     const playerMove = move;
@@ -74,10 +75,11 @@ const displayController = (function() {
 })()
 
 const gameController = (function() {
-    let player1, player2;
+    let player1, player2, currentlyPlaying;
     const start = () => {
         player1 = Player("player1", 'x');
         player2 = Player("player2", 'o');
+        currentlyPlaying = player1;
         Gameboard.create();
         displayController.render();
     }
@@ -87,7 +89,11 @@ const gameController = (function() {
     }
     const play = (index) => {
         if (Gameboard.get()[index] != '') return;
-        Gameboard.mark('x', index);
+        Gameboard.mark(currentlyPlaying.getMove(), index)
+        switch (currentlyPlaying.getName()) {
+            case "player1": currentlyPlaying = player2; break;
+            case "player2": currentlyPlaying = player1; break;
+        }
         displayController.render();
     }
     return {
@@ -96,3 +102,5 @@ const gameController = (function() {
         play,
     }
 })()
+
+window.onload = gameController.start();
