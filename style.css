@@ -11,15 +11,30 @@ html {
     margin: 0 auto;
     justify-content: center;
     align-items: center;
+    gap: 10px;
 }
 
 #canvasGrid {
+    position: relative;
     display: grid;
     grid-template-rows: repeat(3, 1fr);
     grid-template-columns: repeat(3, 1fr);
     width: 500px;
     aspect-ratio: 1 / 1;
     border: 1px solid black;
+}
+
+.stats {
+    margin-top: 10px;
+    display: flex;
+    width: 500px;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.player-stats {
+    width: 5em;
 }
 
 .board-item {
@@ -31,4 +46,22 @@ html {
 
 .item-icon {
     font-size: 8em;
+}
+
+#canvas-block {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    transition: opacity 200ms;
+}
+
+#canvas-block.shown {
+    opacity: 1;
 }
