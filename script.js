@@ -50,6 +50,10 @@ const Gameboard = (function() {
 
 const DOM = (function() {
     return {
+        startButton: document.querySelector('#start-button'),
+        p1score: document.querySelector('#p1-point'),
+        p2score: document.querySelector('#p2-point'),
+
         displayMark: (element) => {
             let icon = document.createElement('i');
             if (element == 'x') {
@@ -60,10 +64,15 @@ const DOM = (function() {
             icon.classList.add("item-icon")       
             return icon;
         },
-        
-       render: () => {
-            let array = Gameboard.get();
+
+        init: () => {
             let canvas = document.querySelector("#canvasGrid");
+                       
+        },
+        
+        render: () => {
+            let canvas = document.querySelector("#canvasGrid");
+            let array = Gameboard.get();
             
             if (canvas.innerHTML != "") {
                 while (canvas.lastElementChild) {
@@ -87,26 +96,26 @@ const DOM = (function() {
                 canvas.appendChild(item);
             })
         },
+
         blockCanvas: (val, playerName) => {
             const item = document.querySelector('#canvas-block');
             const status = document.createElement('h1');
+            const info = document.createElement('p');
             if (val === 'win') {
                 status.innerText = `${playerName} Wins!` 
             } else if (val === 'tie') {
                 status.innerText = "It's a tie!";
             }
+            info.innerText = "Press anywhere to toggle this box";
             item.appendChild(status);
+            item.appendChild(info);
             item.style.pointerEvents = "auto";
-            setTimeout(DOM.toggleCanvas(), 1000);
+            setTimeout(() => DOM.toggleCanvas(), 10);
         },
         toggleCanvas: () => {
             const item = document.querySelector('#canvas-block');
             item.classList.toggle('shown');
         },
-        
-        startButton: document.querySelector('#start-button'),
-        p1score: document.querySelector('#p1-point'),
-        p2score: document.querySelector('#p2-point'),
 
         updateScore: () => {
             if (DOM.p1score.innerText === ""){
