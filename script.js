@@ -65,11 +65,6 @@ const DOM = (function() {
             return icon;
         },
 
-        // init: () => {
-        //     let canvas = document.querySelector("#canvasGrid");
-                       
-        // },
-
         getName: (name) => {
             switch(name) {
                 case "p1": return document.querySelector("#p1-nameInput").value;
@@ -118,6 +113,7 @@ const DOM = (function() {
         },
 
         blockCanvas: (val, playerName) => {
+            DOM.toggleIndicator();
             const item = document.querySelector('#canvas-block');
             const status = document.createElement('h1');
             const info = document.createElement('p');
@@ -132,11 +128,11 @@ const DOM = (function() {
             item.style.pointerEvents = "auto";
             setTimeout(() => DOM.toggleCanvas(), 10);
         },
+
         toggleCanvas: () => {
             const item = document.querySelector('#canvas-block');
             item.classList.toggle('shown');
         },
-
 
         updateScore: () => {
             if (DOM.p1score.innerText === ""){
@@ -145,6 +141,28 @@ const DOM = (function() {
             } else {
                 DOM.p1score.innerText = gameController.getPlayer()[0].getPoint();
                 DOM.p2score.innerText = gameController.getPlayer()[1].getPoint();
+            }
+        },
+
+        toggleIndicator: (player) => {
+            let p1stats = document.querySelector("#p1-stats");
+            let p2stats = document.querySelector("#p2-stats");
+            switch (player){
+                case "p1": {
+                    p1stats.classList.add("shown")
+                    p2stats.classList.remove("shown")
+                    break;
+                }
+                case "p2": {
+                    p2stats.classList.add("shown")
+                    p1stats.classList.remove("shown")
+                    break;
+                }
+                default: {
+                    p1stats.classList.remove("shown")
+                    p2stats.classList.remove("shown")
+                    break;
+                }
             }
         },
     }
@@ -162,6 +180,7 @@ const gameController = (() => {
     const start = () => {
         if (!player1 && !player2) init();
         currentPlayer = player1;
+        DOM.toggleIndicator("p1")
         Gameboard.create();
         DOM.render();
     }
@@ -175,14 +194,15 @@ const gameController = (() => {
         if (Gameboard.get()[index] != '') return;
         Gameboard.mark(currentPlayer.getMove(), index)
         DOM.render();
-        checkWinner();
-        switchPlayer();
+        if(!checkWinner()){
+            switchPlayer();
+        };
     }
 
     const switchPlayer = () => {
         switch (currentPlayer) {
-            case player1: currentPlayer = player2; break;
-            case player2: currentPlayer = player1; break;
+            case player1: DOM.toggleIndicator("p2"); currentPlayer = player2; break;
+            case player2: DOM.toggleIndicator("p1"); currentPlayer = player1; break;
         }
     }
 
@@ -214,10 +234,12 @@ const gameController = (() => {
         if (win) {
             currentPlayer.addPoint();
             DOM.blockCanvas('win', currentPlayer.getName());
-            
+            return true;
         } else if (tie) {
             DOM.blockCanvas('tie');
+            return true;
         }
+        return false;
     }
     DOM.updateScore();
     return {
