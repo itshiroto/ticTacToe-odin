@@ -65,9 +65,29 @@ const DOM = (function() {
             return icon;
         },
 
-        init: () => {
-            let canvas = document.querySelector("#canvasGrid");
+        // init: () => {
+        //     let canvas = document.querySelector("#canvasGrid");
                        
+        // },
+
+        getName: (name) => {
+            switch(name) {
+                case "p1": return document.querySelector("#p1-nameInput").value;
+                case "p2": return document.querySelector("#p2-nameInput").value;
+            }
+        },
+
+        changeName: (name, index) => {
+            switch(index) {
+                case "p1": {
+                    document.querySelector("#p1-name").innerText = name;
+                    return
+                }
+                case "p2": {
+                    document.querySelector("#p2-name").innerText = name;
+                    return
+                }
+            }
         },
         
         render: () => {
@@ -117,6 +137,7 @@ const DOM = (function() {
             item.classList.toggle('shown');
         },
 
+
         updateScore: () => {
             if (DOM.p1score.innerText === ""){
                 DOM.p1score.innerText = "0";
@@ -131,12 +152,15 @@ const DOM = (function() {
 
 const gameController = (() => {
     let player1, player2, currentPlayer;
+    DOM.startButton.addEventListener('click', () => start());
     const init = () => {
-        player1 = Player("Player 1", 'x');
-        player2 = Player("Player 2", 'o');
-        DOM.startButton.addEventListener('click', () => start());
+        player1 = Player(DOM.getName("p1"), 'x');
+        player2 = Player(DOM.getName("p2"), 'o');
+        DOM.changeName(player1.getName(), "p1");
+        DOM.changeName(player2.getName(), "p2");
     }
     const start = () => {
+        if (!player1 && !player2) init();
         currentPlayer = player1;
         Gameboard.create();
         DOM.render();
@@ -195,7 +219,6 @@ const gameController = (() => {
             DOM.blockCanvas('tie');
         }
     }
-    init()
     DOM.updateScore();
     return {
         start,
