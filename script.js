@@ -66,9 +66,17 @@ const DOM = (function() {
         },
 
         getName: (name) => {
+            let p1name = document.querySelector("#p1-nameInput").value;
+            let p2name = document.querySelector("#p2-nameInput").value;
             switch(name) {
-                case "p1": return document.querySelector("#p1-nameInput").value;
-                case "p2": return document.querySelector("#p2-nameInput").value;
+                case "p1": {
+                    if (!p1name) return "Player 1";
+                    else return p1name;
+                }
+                case "p2":{
+                    if (!p2name) return "Player 2";
+                    else return p2name;
+                } 
             }
         },
 

@@ -10,39 +10,40 @@
     <link href="css/all.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Tic Tac Toe</h1>
-    </div>
-    <div class="container">
-        <div id="canvasGrid">
-            <div class="player-initinput">
-                <div class="input-parent" id="p1-parentInput">
-                    <i class="fas fa-times fa-3x"></i>
-                    <label for="" id="p1-nameLabel" class="input-nameLabel">Player 1</label>
-                    <input type="text" class="input-name" id="p1-nameInput" placeholder="Name">
-                </div>
-                <div class="input-parent" id="p2-parentInput">
-                    <i class="far fa-circle fa-3x"></i>
-                    <label for="" id="p2-nameLabel" class="input-nameLabel">Player 2</label>
-                    <input type="text" class="input-name" id="p2-nameInput" placeholder="Name">
+    <div id="wrapper">
+        <header class="container" id="title">
+            <h1>Tic Tac Toe</h1>
+            <p>created by itshiroto</p>
+        </header>
+        <div class="container">
+            <div id="canvasGrid">
+                <div class="player-initinput">
+                    <div class="input-parent" id="p1-parentInput">
+                        <i class="fas fa-times fa-3x"></i>
+                        <label for="" id="p1-nameLabel" class="input-nameLabel"><b>Player 1</b></label>
+                        <input type="text" class="input-name" id="p1-nameInput" placeholder="Name">
+                    </div>
+                    <div class="input-parent" id="p2-parentInput">
+                        <i class="far fa-circle fa-3x"></i>
+                        <label for="" id="p2-nameLabel" class="input-nameLabel"><b>Player 2</b></label>
+                        <input type="text" class="input-name" id="p2-nameInput" placeholder="Name">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container">
-        <div class="stats">
-            <div class="player-stats" id="p1-stats">
-                <h3 class="player-name" id="p1-name">Player 1</h3>
-                <p>Score: <span id="p1-point"></span>
-            </div>
-            <button id="start-button">Start</button>
-            <div class="player-stats" id="p2-stats">
-                <h3 class="player-name" id="p2-name">Player 2</h3>
-                <p>Score: <span id="p2-point"></span>
+        <div class="container">
+            <div class="stats">
+                <div class="player-stats" id="p1-stats">
+                    <h3 class="player-name" id="p1-name">Player 1</h3>
+                    <p>Score: <span id="p1-point"></span>
+                </div>
+                <button id="start-button">Play</button>
+                <div class="player-stats" id="p2-stats">
+                    <h3 class="player-name" id="p2-name">Player 2</h3>
+                    <p>Score: <span id="p2-point"></span>
+                </div>
             </div>
         </div>
-    </div> 
-    <div class="container" id="controls">
     </div>
 </body>
 </html>
