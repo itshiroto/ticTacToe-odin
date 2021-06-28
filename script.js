@@ -4,6 +4,7 @@
 const Player = (name, move) => {
     const playerName = name;
     const playerMove = move;
+    const isBot = false;
     let points = 0;
 
     const getName = () => playerName;
@@ -20,7 +21,25 @@ const Player = (name, move) => {
         getMove,
         getPoint,
         addPoint,
+        isBot,
      };
+}
+
+const Bot = (move) => {
+    const prototype = Player("Bot", move);
+    const play = () => {
+        let index = 0;
+        DOM.canvasBlock(true);
+        while(Gameboard.get()[index] != '') {
+            index = Math.floor(Math.random() * 10)
+        }
+        gameController.play(index);
+    }
+    const isBot = true;
+    return Object.assign({}, prototype, {
+        play,
+        isBot,
+    });
 }
 
 const Gameboard = (function() {
@@ -105,7 +124,6 @@ const DOM = (function() {
             
             const canvasBlock = document.createElement('div');
             canvasBlock.setAttribute('id', 'canvas-block');
-            canvasBlock.addEventListener('click', () => DOM.toggleCanvas());
             canvas.appendChild(canvasBlock);
             
             array.forEach((element, index) => {
@@ -120,11 +138,13 @@ const DOM = (function() {
             })
         },
 
-        blockCanvas: (val, playerName) => {
+        finish: (val, playerName) => {
             DOM.toggleIndicator();
             const item = document.querySelector('#canvas-block');
             const status = document.createElement('h1');
             const info = document.createElement('p');
+            item.classList.add('win');
+            item.addEventListener('click', () => DOM.canvasBlock());
             if (val === 'win') {
                 status.innerText = `${playerName} Wins!` 
             } else if (val === 'tie') {
@@ -133,13 +153,16 @@ const DOM = (function() {
             info.innerText = "Press anywhere to toggle this box";
             item.appendChild(status);
             item.appendChild(info);
-            item.style.pointerEvents = "auto";
-            setTimeout(() => DOM.toggleCanvas(), 10);
+            setTimeout(() => DOM.canvasBlock(true), 10);
         },
-
-        toggleCanvas: () => {
+        
+        canvasBlock: (bool) => {
             const item = document.querySelector('#canvas-block');
-            item.classList.toggle('shown');
+            switch(bool){
+                case true: item.classList.add('shown'); break;
+                case false: item.classList.remove('shown'); break;
+                default: item.classList.toggle('shown'); break;
+            }
         },
 
         updateScore: () => {
@@ -181,7 +204,8 @@ const gameController = (() => {
     DOM.startButton.addEventListener('click', () => start());
     const init = () => {
         player1 = Player(DOM.getName("p1"), 'x');
-        player2 = Player(DOM.getName("p2"), 'o');
+        // player2 = Player(DOM.getName("p2"), 'o');
+        player2 = Bot('o');
         DOM.changeName(player1.getName(), "p1");
         DOM.changeName(player2.getName(), "p2");
     }
@@ -197,11 +221,16 @@ const gameController = (() => {
         const playerCache = [player1, player2]
         return playerCache;
     }
+    const getCurrentPlayer = () => {
+        const playerCache = currentPlayer;
+        return playerCache;
+    }
 
     const play = (index) => {
-        if (Gameboard.get()[index] != '') return;
+        if (Gameboard.get()[index] != '') return false;
         Gameboard.mark(currentPlayer.getMove(), index)
         DOM.render();
+        DOM.canvasBlock(false);
         if(!checkWinner()){
             switchPlayer();
         };
@@ -211,6 +240,10 @@ const gameController = (() => {
         switch (currentPlayer) {
             case player1: DOM.toggleIndicator("p2"); currentPlayer = player2; break;
             case player2: DOM.toggleIndicator("p1"); currentPlayer = player1; break;
+        }
+        if (currentPlayer.isBot === true) {
+            DOM.canvasBlock(true);
+            setTimeout(() => currentPlayer.play(), 500);
         }
     }
 
@@ -241,10 +274,10 @@ const gameController = (() => {
         
         if (win) {
             currentPlayer.addPoint();
-            DOM.blockCanvas('win', currentPlayer.getName());
+            DOM.finish('win', currentPlayer.getName());
             return true;
         } else if (tie) {
-            DOM.blockCanvas('tie');
+            DOM.finish('tie');
             return true;
         }
         return false;
@@ -254,5 +287,7 @@ const gameController = (() => {
         start,
         play,
         getPlayer,
+        getCurrentPlayer,
     }
 })()
+

@@ -84,6 +84,10 @@ header h1 {
     height: 100%;
     opacity: 0;
     pointer-events: none;
+
+}
+
+#canvas-block.win {
     color: var(--light);
     justify-content: center;
     align-items: center;
@@ -91,10 +95,12 @@ header h1 {
     transition: opacity 200ms ease-in-out;
     user-select: none;
     flex-direction: column;
+    pointer-events: auto;
 }
 
 #canvas-block.shown {
     opacity: 1;
+    pointer-events: auto;
 }
 
 .player-initinput {
